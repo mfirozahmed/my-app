@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "react-app",
+    "plugin:@next/next/recommended",
+    "prettier",
+    "next"
+  ],
+  "rules": {
+    "@next/next/no-document-import-in-page": "off",
+    "react/no-unescaped-entities": 0
+  },
+  "ignorePatterns": ["*.json"]
+}
