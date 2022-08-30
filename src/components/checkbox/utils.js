@@ -44,6 +44,16 @@ export const BOX_ALIGNMENT_STYLES = {
   bottom: "flex flex-col-reverse items-center gap-2",
 };
 
+export const BOX_COLORS = {
+  default: 'border-2 checked:border-default-500 text-default-500 focus:outline-default-500 focus:ring-default-500',
+  success: 'border-2 checked:border-green-500 text-green-500 focus:outline-green-500 focus:ring-green-500',
+  danger: 'border-2 checked:border-red-500 text-red-500 focus:outline-red-500 focus:ring-red-500',
+  warning: 'border-2 checked:border-yellow-500 text-yellow-500 focus:outline-yellow-500 focus:ring-yellow-500',
+  info: 'border-2 checked:border-blue-400 text-blue-400 focus:outline-blue-400 focus:ring-blue-400',
+  light: 'border-2 checked:border-gray-200 text-gray-500 focus:outline-gray-200 focus:ring-gray-200',
+  dark: 'border-2 checked:border-gray-800 text-gray-800 focus:outline-gray-800 focus:ring-gray-800'
+};
+
 export const DEEP_EQUAL = (x, y) => {
   if (x === y) {
     return true;

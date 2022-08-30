@@ -1,57 +1,50 @@
 import VsCheckbox from "components/checkbox";
 import { dummyData } from "components/checkbox/utils";
-import { ChangeEvent, FormEvent, useState } from "react"
+import CreateData from "features/checkbox/createData";
+import CreateOtherProps from "features/checkbox/createOtherProps";
+import React, { ChangeEvent, useState } from "react"
 
-const initialNewData = {
-    id: "",
-    name: "",
-    value: "",
-    label: "",
-    description: "",
-    disabled: false,
-    hint: "",
+
+const initialOtherProps: OtherPropsType = {
+    containerStyle: "block",
+    size: "md",
+    boxBorderStyle: "default",
+    boxColor: "default",
+    alignment: "default",
+    pattern: "default",
+
+    componentClass: "",
+    questionLabelClass: "",
+    containerClass: "",
+    itemClass: "",
+    inputClass: "",
+    buttonClass: "",
+    labelClass: "",
+    hintClass: "",
+    hintIconClass: "",
+    hintTextClass: "",
+    descriptionClass: "",
+
+    question: "",
+    questionHint: "",
 }
 
-const isDisabledCheckOption = {
-    id: "disable",
-    value: "disable",
-    label: "Is Disabled?"
-}
 
 const Checkbox = () => {
-    const [data, setData] = useState<dataType[]>([]);
-    const [newData, setNewData] = useState<dataType>({ ...initialNewData });
-    const [selectedData, setSelectedData] = useState<dataType[]>([]);
+    const [data, setData] = useState<DataType[]>(dummyData);
+    const [otherProps, setOtherProps] = useState({ ...initialOtherProps })
+    const [selectedData, setSelectedData] = useState<DataType[]>([]);
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setNewData({ ...newData, [name]: value });
-    }
-
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        if (data?.length) {
-            const items = [...data];
-            items.push(newData);
-            setData(items);
-        } else {
-            setData([newData]);
-        }
-
-        setNewData({ ...initialNewData });
-    }
-
-    const getData = (data: dataType[]) => {
+    const getData = (data: DataType[]) => {
         setSelectedData(data);
     }
 
-    const handleCheckChange = (data: dataType[]) => {
-        if (data.length) {
-            setNewData({ ...newData, disabled: true });
-        } else {
-            setNewData({ ...newData, disabled: false });
-        }
+    const handleRemoveData = (event: React.MouseEvent<HTMLSpanElement>) => {
+        const removeDataId = event.currentTarget.dataset.item;
+        let tempData = data.filter(item => item.id !== removeDataId);
+        setData(tempData);
+        tempData = selectedData.filter(item => item.id !== removeDataId);
+        setSelectedData(tempData);
     }
 
     return (
@@ -60,108 +53,64 @@ const Checkbox = () => {
                 <h1 className="py-10 text-4xl font-semibold">Check Checkbox Component
                 </h1>
 
-                <h3 className="my-4 text-2xl font-medium">Input Data</h3>
-                <form className="px-8 py-4 rounded-md bg-gray-300 text-black text-lg font-medium" onSubmit={handleSubmit}>
-                    <div className="flex flex-wrap justify-between items-center gap-x-2 gap-y-4">
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="id">Id</label>
-                            <input
-                                id="id"
-                                type="text"
-                                name="id"
-                                className="rounded-md"
-                                value={newData.id}
-                                placeholder="Give An Unique Id"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="name">Name (Optional)</label>
-                            <input
-                                id="name"
-                                type="text"
-                                name="name"
-                                className="rounded-md"
-                                value={newData.name}
-                                placeholder="Give A Name"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="value">Value</label>
-                            <input
-                                id="value"
-                                type="text"
-                                name="value"
-                                className="rounded-md"
-                                value={newData.value}
-                                placeholder="Give A Value"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="label">Label (Optional)</label>
-                            <input
-                                id="label"
-                                type="text"
-                                name="label"
-                                className="rounded-md"
-                                value={newData.label}
-                                placeholder="Give A Label"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="description">Description (Optional)</label>
-                            <input
-                                id="description"
-                                type="text"
-                                name="description"
-                                className="rounded-md"
-                                value={newData.description}
-                                placeholder="Give A Description"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="flex flex-col w-[48%] xl:w-1/4">
-                            <label className="my-1" htmlFor="hint">Hint (Optional)</label>
-                            <input
-                                id="hint"
-                                type="text"
-                                name="hint"
-                                className="rounded-md"
-                                value={newData.hint}
-                                placeholder="Give A Hint"
-                                onChange={handleInputChange}
-                            />
-                        </div>
+                <div className="w-full mb-10">
+                    <h3 className="my-4 text-2xl font-medium">Input Data</h3>
+                    <CreateData data={data} sendData={(data) => setData(data)} />
+                </div>
 
-                        <VsCheckbox
-                            data={[isDisabledCheckOption]}
-                            prevState={newData.disabled ? [isDisabledCheckOption] : []}
-                            getData={handleCheckChange}
-                            componentClass="gap-0"
-                            itemClass="px-0"
-                        />
+                <h3 className="my-4 text-2xl font-medium">Data</h3>
+                <div className="mb-10 flex flex-wrap items-center gap-2">
+                    {data?.length ? data.map(item => (
+                        <p key={item.id} className="relative px-5 pt-4 pb-3 bg-blue-300 rounded-md text-black font-medium">
+                            <label>{item.label ? item.label : "(No Label)"}</label>
+                            <span data-item={item.id} className="absolute top-0 right-1 text-sm text-red-700 cursor-pointer" onClick={handleRemoveData}>X</span>
+                        </p>
+                    )) :
+                        <p>No Data Found!!</p>
+                    }
+                </div>
 
+                <div className="pb-20 flex flex-row justify-between">
+                    <div className="w-[30%]">
+                        <h3 className="my-4 text-2xl font-medium">Other Props</h3>
+                        <CreateOtherProps otherProps={otherProps} sendData={(data) => setOtherProps(data)} />
                     </div>
-                    <button className="my-4 px-4 py-1 border border-black rounded-md bg-gray-600 hover:bg-gray-500 disabled:cursor-not-allowed disabled:bg-gray-500 transition-all duration-300 text-white" type="submit" disabled={!newData.id || !newData.value.toString().length} >Add</button>
-                </form>
-
-                <div className="mt-20 flex flex-row">
-                    <div className="w-[48%]">
+                    <div className="w-[30%]">
+                        <h3 className="my-4 text-2xl font-medium">Component</h3>
                         <VsCheckbox
+                            containerStyle={otherProps.containerStyle}
+                            size={otherProps.size}
+                            boxBorderStyle={otherProps.boxBorderStyle}
+                            boxColor={otherProps.boxColor}
+                            alignment={otherProps.alignment}
+                            pattern={otherProps.pattern}
+
+                            componentClass={otherProps.componentClass}
+                            questionLabelClass={otherProps.questionLabelClass}
+                            containerClass={otherProps.containerClass}
+                            itemClass={otherProps.itemClass}
+                            inputClass={otherProps.inputClass}
+                            buttonClass={otherProps.buttonClass}
+                            labelClass={otherProps.labelClass}
+                            hintClass={otherProps.hintClass}
+                            hintIconClass={otherProps.hintIconClass}
+                            hintTextClass={otherProps.hintTextClass}
+                            descriptionClass={otherProps.descriptionClass}
+
+                            question={otherProps.question}
+                            questionHint={otherProps.questionHint}
+
                             data={data}
-                            prevState={[]}
+                            prevState={selectedData}
                             getData={getData}
                         />
                     </div>
-                    <div className="w-[48%]">
-                        <label htmlFor="">Selected Data</label>
+                    <div className="w-[30%]">
+                        <h3 className="my-4 text-2xl font-medium">Selected Data</h3>
                         <ul>
-                            {selectedData?.map(data => (
-                                <li key={data.id}>{data.label}</li>
-                            ))}
+                            {selectedData?.length ? selectedData.map(data => (
+                                <li key={data.id} className="mb-2 px-4 py-2 w-max border border-black rounded-md bg-green-700 font-medium">{data.label}</li>
+                            )) : <li>No Data is selected!!</li>}
                         </ul>
                     </div>
                 </div>

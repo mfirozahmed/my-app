@@ -10,6 +10,7 @@ import {
   DEEP_EQUAL,
   dummyData,
   QUESTION_SIZES,
+  BOX_COLORS,
 } from "./utils";
 import VsButton from "../button";
 
@@ -17,6 +18,7 @@ export interface CheckBoxProps extends HTMLAttributes<HTMLInputElement> {
   containerStyle?: "block" | "inline";
   size?: "sm" | "md" | "lg" | "xl";
   boxBorderStyle?: "default" | "none" | "rounded";
+  boxColor?: 'default' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark',
   alignment?: "default" | "right" | "top" | "bottom";
   pattern?: "default" | "button";
 
@@ -35,13 +37,13 @@ export interface CheckBoxProps extends HTMLAttributes<HTMLInputElement> {
   question?: string;
   questionHint?: string;
   hintIcon?: React.ReactNode;
-  data: dataType[];
-  prevState: dataType[];
+  data: DataType[];
+  prevState: DataType[];
 
-  getData: (data: dataType[]) => void;
+  getData: (data: DataType[]) => void;
 }
 
-interface dataType {
+interface DataType {
   id: string;
   name?: string;
   value: string | number;
@@ -57,6 +59,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     containerStyle = "block",
     size = "md",
     boxBorderStyle = "default",
+    boxColor = "default",
     alignment = "default",
     pattern = "default",
 
@@ -81,7 +84,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     getData,
   } = props;
 
-  const [state, setState] = useState<dataType[]>([]);
+  const [state, setState] = useState<DataType[]>([]);
   const [hintId, setHintId] = useState<number | string>(-1);
 
   useEffect(() => {
@@ -96,9 +99,10 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
   const containerClassName = clsx("flex-wrap", CONTAINER_STYLES[containerStyle], containerClass);
   const itemClassName = clsx("w-max p-2", BOX_ALIGNMENT_STYLES[alignment], itemClass);
   const inputClassName = clsx(
-    "appearance-none border border-gray-500 checked:border-transparent disabled:border-gray-400 bg-white checked:bg-current disabled:bg-gray-400 text-red-600 cursor-pointer disabled:cursor-not-allowed focus:outline-none ring-0 focus:ring-0 ring-offset-0 focus:ring-offset-0 transition duration-300 bg-no-repeat bg-center bg-contain",
+    "appearance-none disabled:bg-gray-400 cursor-pointer disabled:cursor-not-allowed transition duration-300 bg-no-repeat bg-center bg-contain",
     BOX_SIZES[size],
     BOX_BORDER_STYLES[boxBorderStyle],
+    BOX_COLORS[boxColor],
     inputClass
   );
   const buttonClassName = clsx("border-2 duration-300", buttonClass);
@@ -111,7 +115,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
   );
   const descriptionClassName = clsx("text-gray-400", descriptionClass, DESCRIPTION_SIZES[size]);
 
-  const handleChange = (item: dataType) => {
+  const handleChange = (item: DataType) => {
     const newItem = JSON.parse(JSON.stringify(item));
     if (newItem.children) {
       delete newItem.children;
@@ -144,7 +148,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     setHintId(-1);
   };
 
-  const isChecked = (data: dataType) => {
+  const isChecked = (data: DataType) => {
     const newItem = JSON.parse(JSON.stringify(data));
     if (newItem.children) {
       delete newItem.children;
@@ -205,7 +209,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
         </div>
       </div>
       <div className={containerClassName}>
-        {data?.map((item: dataType) => (
+        {data?.map((item: DataType) => (
           <div key={item.id} className={itemClassName}>
             {pattern === "default" ? (
               <>
@@ -281,24 +285,39 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
             ) : (
               <VsButton
                 btnSize={size}
-                classNames={clsx(
-                  isChecked(item) === -1
-                    ? "bg-white text-black hover:bg-blue-200 border-black"
-                    : "bg-blue-500 text-white border-blue-500 hover:bg-blue-200 hover:text-black hover:border-black",
-                  item.disabled
-                    ? "text-gray-400 !border-gray-400 cursor-not-allowed"
-                    : "cursor-pointer",
-                  buttonClassName
-                )}
+                // classNames={clsx(
+                //   isChecked(item) === -1
+                //     ? "bg-white text-black hover:bg-blue-200 border-black"
+                //     : "bg-blue-500 text-white border-blue-500 hover:bg-blue-200 hover:text-black hover:border-black",
+                //   item.disabled
+                //     ? "text-gray-400 !border-gray-400 cursor-not-allowed"
+                //     : "cursor-pointer",
+                //   buttonClassName
+                // )}
                 disabled={item.disabled}
                 onClick={() => handleChange(item)}
-              >
-                {item.children ? item.children : item.label ? item.label : "Default"}
-              </VsButton>
+                btnBorderStyle={boxBorderStyle}
+                btnType="outline"
+                btnColor={boxColor}
+                children={item.children ?? item.label}
+              />
             )}
           </div>
         ))}
       </div>
-    </div>
+    </div >
   );
 });
+
+// {
+//   item.children ? item.children : item.label ?
+//     <label
+//       className={clsx(
+//         labelClassName,
+//         item?.disabled ? "text-gray-400 cursor-not-allowed" : "cursor-pointer"
+//       )}
+//       htmlFor={item.id}
+//     >
+//       {item?.label}
+//     </label> : "(No Label)"
+// }
