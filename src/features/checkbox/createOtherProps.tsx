@@ -9,7 +9,11 @@ const CreateOtherProps = ({ otherProps, sendData }: CreateOtherPropsType) => {
 
     const handleOtherPropsChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        sendData({ ...otherProps, [name]: value });
+        if (name === "pattern" && value === "button") {
+            sendData({ ...otherProps, [name]: value, containerStyle: "inline" });
+        } else {
+            sendData({ ...otherProps, [name]: value });
+        }
     }
 
     return (

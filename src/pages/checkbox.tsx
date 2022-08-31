@@ -1,8 +1,12 @@
+
+import { useState } from "react"
+
 import VsCheckbox from "components/checkbox";
-import { dummyData } from "components/checkbox/utils";
+
 import CreateData from "features/checkbox/createData";
 import CreateOtherProps from "features/checkbox/createOtherProps";
-import React, { ChangeEvent, useState } from "react"
+
+import { dummyData } from "components/checkbox/utils";
 
 
 const initialOtherProps: OtherPropsType = {

@@ -11,6 +11,7 @@ import {
   dummyData,
   QUESTION_SIZES,
   BOX_COLORS,
+  BUTTON_BOX_COLORS,
 } from "./utils";
 import VsButton from "../button";
 
@@ -99,13 +100,13 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
   const containerClassName = clsx("flex-wrap", CONTAINER_STYLES[containerStyle], containerClass);
   const itemClassName = clsx("w-max p-2", BOX_ALIGNMENT_STYLES[alignment], itemClass);
   const inputClassName = clsx(
-    "appearance-none disabled:bg-gray-400 cursor-pointer disabled:cursor-not-allowed transition duration-300 bg-no-repeat bg-center bg-contain",
+    "appearance-none border-2 border-gray-200 disabled:opacity-80 cursor-pointer disabled:cursor-not-allowed focus:outline-none focus:ring-transparent focus:ring-offset-4 transition duration-300 bg-no-repeat bg-center bg-contain",
     BOX_SIZES[size],
     BOX_BORDER_STYLES[boxBorderStyle],
     BOX_COLORS[boxColor],
     inputClass
   );
-  const buttonClassName = clsx("border-2 duration-300", buttonClass);
+  const buttonClassName = clsx("hover:bg-transparent focus:outline-none focus:ring-transparent", buttonClass);
   const labelClassName = clsx("inline-block text-black", LABEL_SIZES[size], labelClass);
   const hintClassName = clsx("flex flex-row relative", hintClass);
   const hintIconClassName = clsx("text-black", hintIconClass);
@@ -294,12 +295,14 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
                 //     : "cursor-pointer",
                 //   buttonClassName
                 // )}
-                disabled={item.disabled}
+                classNames={clsx(
+                  isChecked(item) !== -1 ? BUTTON_BOX_COLORS['selected'][boxColor] : BUTTON_BOX_COLORS['notSelected'][boxColor], buttonClassName)}
+                disabled={item?.disabled}
                 onClick={() => handleChange(item)}
                 btnBorderStyle={boxBorderStyle}
                 btnType="outline"
-                btnColor={boxColor}
-                children={item.children ?? item.label}
+                // btnColor={boxColor}
+                children={item?.children ?? item?.label}
               />
             )}
           </div>

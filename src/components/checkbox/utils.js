@@ -45,14 +45,47 @@ export const BOX_ALIGNMENT_STYLES = {
 };
 
 export const BOX_COLORS = {
-  default: 'border-2 checked:border-default-500 text-default-500 focus:outline-default-500 focus:ring-default-500',
-  success: 'border-2 checked:border-green-500 text-green-500 focus:outline-green-500 focus:ring-green-500',
-  danger: 'border-2 checked:border-red-500 text-red-500 focus:outline-red-500 focus:ring-red-500',
-  warning: 'border-2 checked:border-yellow-500 text-yellow-500 focus:outline-yellow-500 focus:ring-yellow-500',
-  info: 'border-2 checked:border-blue-400 text-blue-400 focus:outline-blue-400 focus:ring-blue-400',
-  light: 'border-2 checked:border-gray-200 text-gray-500 focus:outline-gray-200 focus:ring-gray-200',
-  dark: 'border-2 checked:border-gray-800 text-gray-800 focus:outline-gray-800 focus:ring-gray-800'
+  default: 'text-default-500 checked:border-default-500 focus:border-default-300 focus:ring-offset-default-200/80',
+  success: 'text-green-500 checked:border-green-500 focus:border-green-300 focus:ring-offset-green-200/80',
+  danger: 'text-red-500 checked:border-red-500 focus:border-red-300 focus:ring-offset-red-200/80',
+  warning: 'text-yellow-500 checked:border-yellow-500 focus:border-yellow-300 focus:ring-offset-yellow-200/80',
+  info: 'text-blue-400 checked:border-blue-400 focus:border-blue-300 focus:ring-offset-blue-200/80',
+  light: 'text-gray-500 checked:border-gray-500 focus:border-gray-300 focus:ring-offset-gray-200/80',
+  dark: 'text-gray-800 checked:border-gray-800 focus:border-gray-500 focus:ring-offset-gray-400/80'
 };
+
+export const BUTTON_BOX_COLORS = {
+  selected: {
+    default: 'text-default-500 hover:text-default-500 border-default-500 focus:border-default-500 focus:ring-offset-default-200/80',
+    success: 'text-green-500 hover:text-green-500 border-green-500 focus:border-green-500 focus:ring-offset-green-200/80',
+    danger: 'text-red-500 hover:text-red-500 border-red-500 focus:border-red-500 focus:ring-offset-red-200/80',
+    warning: 'text-yellow-500 hover:text-yellow-500 border-yellow-500 focus:border-yellow-500 focus:ring-offset-yellow-200/80',
+    info: 'text-blue-500 hover:text-blue-500 border-blue-500 focus:border-blue-400 focus:ring-offset-blue-200/80',
+    light: 'text-gray-500 hover:text-gray-500 border-gray-500 focus:border-gray-500 focus:ring-offset-gray-200/80',
+    dark: 'text-gray-800 hover:text-gray-800 border-gray-500 focus:border-gray-800 focus:ring-offset-gray-400/80'
+  },
+  notSelected: {
+    default: 'text-gray-500 hover:text-black border-gray-200 focus:border-default-500 focus:border-default-500 focus:ring-offset-default-200/80',
+    success: 'text-gray-500 hover:text-black border-gray-200 focus:border-green-500 focus:border-green-500 focus:border-green-500 focus:ring-offset-green-200/80',
+    danger: 'text-gray-500 hover:text-black border-gray-200 focus:border-red-500 focus:border-red-500 focus:ring-offset-red-200/80',
+    warning: 'text-gray-500 hover:text-black border-gray-200 focus:border-yellow-500 focus:border-yellow-500 focus:ring-offset-yellow-200/80',
+    info: 'text-gray-500 hover:text-black border-gray-200 focus:border-blue-400 focus:border-blue-500 focus:ring-offset-blue-200/80',
+    light: 'text-gray-500 hover:text-black border-gray-200 focus:border-gray-500 focus:border-gray-500 focus:ring-offset-gray-200/80',
+    dark: 'text-gray-500 hover:text-black border-gray-200 focus:border-gray-800 focus:border-gray-500 focus:ring-offset-gray-400/80'
+  },
+};
+
+// export const BUTTON_BOX_SELECTED_TEXT_COLORS = {
+//   default: 'text-default-500',
+//   success: 'text-green-500',
+//   danger: 'text-red-500',
+//   warning: 'text-yellow-500',
+//   info: 'text-blue-400',
+//   light: 'text-gray-500',
+//   dark: 'text-gray-800'
+// };
+
+
 
 export const DEEP_EQUAL = (x, y) => {
   if (x === y) {
@@ -82,13 +115,13 @@ export const dummyData = [
     value: 1,
     label: "Default Checkbox 1",
     description: "Long Long Long Long Long Long Long Description",
-    disabled: false,
+    // disabled: true,
     hint: "Short hint",
-    children: (
-      <div className="flex justify-center items-center p-2">
-        <div className="p-4">An Image</div>
-      </div>
-    ),
+    // children: (
+    //   <div className="flex justify-center items-center p-2">
+    //     <div className="p-4">An Image</div>
+    //   </div>
+    // ),
   },
   {
     id: "2",
@@ -96,7 +129,7 @@ export const dummyData = [
     value: 2,
     label: "Default Checkbox 2",
     description: "Short Description",
-    disabled: true,
+    disabled: false,
     hint: "Nothing",
   },
   {
@@ -113,22 +146,22 @@ export const dummyData = [
     value: 4,
     label: "Default Checkbox 4",
     // description: "Short Description",
-    disabled: true,
+    disabled: false,
   },
-  {
-    id: "5",
-    // name: "5",
-    value: 5,
-    label: "",
-    // description: "Short Description",
-    // disabled: true,
-  },
-  {
-    id: "6",
-    // name: "6",
-    value: 6,
-    label: "",
-    // description: "Short Description",
-    disabled: true,
-  },
+  // {
+  //   id: "5",
+  //   // name: "5",
+  //   value: 5,
+  //   label: "",
+  //   // description: "Short Description",
+  //   // disabled: true,
+  // },
+  // {
+  //   id: "6",
+  //   // name: "6",
+  //   value: 6,
+  //   label: "",
+  //   // description: "Short Description",
+  //   disabled: true,
+  // },
 ];
