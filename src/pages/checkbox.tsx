@@ -6,7 +6,7 @@ import VsCheckbox from "components/checkbox";
 import CreateData from "features/checkbox/createData";
 import CreateOtherProps from "features/checkbox/createOtherProps";
 
-import { dummyData } from "components/checkbox/utils";
+import { dummyData } from "../data";
 
 
 const initialOtherProps: OtherPropsType = {
@@ -75,11 +75,11 @@ const Checkbox = () => {
                 </div>
 
                 <div className="pb-20 flex flex-row justify-between">
-                    <div className="w-[30%]">
+                    <div className="w-3/10">
                         <h3 className="my-4 text-2xl font-medium">Other Props</h3>
                         <CreateOtherProps otherProps={otherProps} sendData={(data) => setOtherProps(data)} />
                     </div>
-                    <div className="w-[30%]">
+                    <div className="w-3/10">
                         <h3 className="my-4 text-2xl font-medium">Component</h3>
                         <VsCheckbox
                             containerStyle={otherProps.containerStyle}
@@ -109,7 +109,7 @@ const Checkbox = () => {
                             getData={getData}
                         />
                     </div>
-                    <div className="w-[30%]">
+                    <div className="w-3/10">
                         <h3 className="my-4 text-2xl font-medium">Selected Data</h3>
                         <ul>
                             {selectedData?.length ? selectedData.map(data => (

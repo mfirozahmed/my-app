@@ -8,7 +8,6 @@ import {
   DESCRIPTION_SIZES,
   LABEL_SIZES,
   DEEP_EQUAL,
-  dummyData,
   QUESTION_SIZES,
   BOX_COLORS,
   BUTTON_BOX_COLORS,
@@ -64,22 +63,22 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     alignment = "default",
     pattern = "default",
 
-    componentClass,
-    questionLabelClass,
-    containerClass,
-    itemClass,
-    inputClass,
-    buttonClass,
-    labelClass,
-    hintClass,
-    hintIconClass,
-    hintTextClass,
-    descriptionClass,
+    componentClass = "",
+    questionLabelClass = "",
+    containerClass = "",
+    itemClass = "",
+    inputClass = "",
+    buttonClass = "",
+    labelClass = "",
+    hintClass = "",
+    hintIconClass = "",
+    hintTextClass = "",
+    descriptionClass = "",
 
-    question,
-    questionHint,
+    question = "",
+    questionHint = "",
     hintIcon,
-    data = dummyData,
+    data,
     prevState,
 
     getData,
@@ -96,9 +95,9 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
   }, [prevState]);
 
   const componentClassName = clsx("flex flex-col gap-2", componentClass);
-  const questionLabelClassName = clsx("flex flex-row items-center text-black", question ? "gap-x-2 p-2" : "", QUESTION_SIZES[size], questionLabelClass);
+  const questionLabelClassName = clsx("flex flex-row items-center text-current", question ? "gap-x-2 p-2" : "", QUESTION_SIZES[size], questionLabelClass);
   const containerClassName = clsx("flex-wrap", CONTAINER_STYLES[containerStyle], containerClass);
-  const itemClassName = clsx("w-max p-2", BOX_ALIGNMENT_STYLES[alignment], itemClass);
+  const itemClassName = clsx("p-2", BOX_ALIGNMENT_STYLES[alignment], itemClass);
   const inputClassName = clsx(
     "appearance-none border-2 border-gray-200 disabled:opacity-80 cursor-pointer disabled:cursor-not-allowed focus:outline-none focus:ring-transparent focus:ring-offset-4 transition duration-300 bg-no-repeat bg-center bg-contain",
     BOX_SIZES[size],
@@ -106,48 +105,15 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     BOX_COLORS[boxColor],
     inputClass
   );
-  const buttonClassName = clsx("hover:bg-transparent focus:outline-none focus:ring-transparent", buttonClass);
-  const labelClassName = clsx("inline-block text-black", LABEL_SIZES[size], labelClass);
+  const buttonClassName = clsx("hover:bg-transparent focus:ring focus:ring-transparent focus:ring-offset-4", buttonClass);
+  const labelClassName = clsx("inline-block text-current", LABEL_SIZES[size], labelClass);
   const hintClassName = clsx("flex flex-row relative", hintClass);
-  const hintIconClassName = clsx("text-black", hintIconClass);
+  const hintIconClassName = clsx("text-current", hintIconClass);
   const hintTextClassName = clsx(
-    "absolute left-5 w-40 p-2 border border-gray-500 bg-gray-300 rounded-md font-normal text-black text-sm",
+    "absolute left-5 w-40 p-2 border border-gray-500 bg-gray-300 rounded-md font-normal text-current text-sm",
     hintTextClass
   );
   const descriptionClassName = clsx("text-gray-400", descriptionClass, DESCRIPTION_SIZES[size]);
-
-  const handleChange = (item: DataType) => {
-    const newItem = JSON.parse(JSON.stringify(item));
-    if (newItem.children) {
-      delete newItem.children;
-    }
-
-    if (state?.length) {
-      const items = [...state];
-      const value = isChecked(newItem);
-      if (value !== -1) {
-        items.splice(value, 1);
-        setState(items);
-      } else {
-        items.push(newItem);
-        setState(items);
-      }
-      getData(items);
-    } else {
-      setState([newItem]);
-      getData([newItem]);
-    }
-  };
-
-  const handleShowHint = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setHintId(event.currentTarget.id);
-  };
-
-  const handleHideHint = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setHintId(-1);
-  };
 
   const isChecked = (data: DataType) => {
     const newItem = JSON.parse(JSON.stringify(data));
@@ -165,6 +131,39 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
       }
     }
     return -1;
+  };
+
+  const handleChange = (item: DataType) => {
+    const newItem = JSON.parse(JSON.stringify(item));
+    if (newItem.children) {
+      delete newItem.children;
+    }
+
+    if (state?.length) {
+      const items = [...state];
+      const value = isChecked(newItem);
+      if (value !== -1) {
+        items.splice(value, 1);
+      } else {
+        items.push(newItem);
+      }
+
+      setState(items);
+      getData(items);
+    } else {
+      setState([newItem]);
+      getData([newItem]);
+    }
+  };
+
+  const handleShowHint = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setHintId(event.currentTarget.id);
+  };
+
+  const handleHideHint = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setHintId(-1);
   };
 
   return (
@@ -286,22 +285,12 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
             ) : (
               <VsButton
                 btnSize={size}
-                // classNames={clsx(
-                //   isChecked(item) === -1
-                //     ? "bg-white text-black hover:bg-blue-200 border-black"
-                //     : "bg-blue-500 text-white border-blue-500 hover:bg-blue-200 hover:text-black hover:border-black",
-                //   item.disabled
-                //     ? "text-gray-400 !border-gray-400 cursor-not-allowed"
-                //     : "cursor-pointer",
-                //   buttonClassName
-                // )}
                 classNames={clsx(
                   isChecked(item) !== -1 ? BUTTON_BOX_COLORS['selected'][boxColor] : BUTTON_BOX_COLORS['notSelected'][boxColor], buttonClassName)}
                 disabled={item?.disabled}
                 onClick={() => handleChange(item)}
                 btnBorderStyle={boxBorderStyle}
                 btnType="outline"
-                // btnColor={boxColor}
                 children={item?.children ?? item?.label}
               />
             )}
@@ -311,16 +300,3 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     </div >
   );
 });
-
-// {
-//   item.children ? item.children : item.label ?
-//     <label
-//       className={clsx(
-//         labelClassName,
-//         item?.disabled ? "text-gray-400 cursor-not-allowed" : "cursor-pointer"
-//       )}
-//       htmlFor={item.id}
-//     >
-//       {item?.label}
-//     </label> : "(No Label)"
-// }
