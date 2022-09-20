@@ -1,5 +1,8 @@
-import React, { HTMLAttributes, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import clsx from "clsx";
+
+import VsButton from "../button";
+
 import {
   BOX_ALIGNMENT_STYLES,
   BOX_BORDER_STYLES,
@@ -7,52 +10,13 @@ import {
   CONTAINER_STYLES,
   DESCRIPTION_SIZES,
   LABEL_SIZES,
-  DEEP_EQUAL,
   QUESTION_SIZES,
   BOX_COLORS,
   BUTTON_BOX_COLORS,
 } from "./utils";
-import VsButton from "../button";
+import { CheckBoxProps, DataType } from "./types";
+import { HintIcon } from "./icons";
 
-export interface CheckBoxProps extends HTMLAttributes<HTMLInputElement> {
-  containerStyle?: "block" | "inline";
-  size?: "sm" | "md" | "lg" | "xl";
-  boxBorderStyle?: "default" | "none" | "rounded";
-  boxColor?: 'default' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark',
-  alignment?: "default" | "right" | "top" | "bottom";
-  pattern?: "default" | "button";
-
-  componentClass?: string;
-  questionLabelClass?: string;
-  containerClass?: string;
-  itemClass?: string;
-  inputClass?: string;
-  buttonClass?: string;
-  labelClass?: string;
-  hintClass?: string;
-  hintIconClass?: string;
-  hintTextClass?: string;
-  descriptionClass?: string;
-
-  question?: string;
-  questionHint?: string;
-  hintIcon?: React.ReactNode;
-  data: DataType[];
-  prevState: DataType[];
-
-  getData: (data: DataType[]) => void;
-}
-
-interface DataType {
-  id: string;
-  name?: string;
-  value: string | number;
-  label?: string;
-  description?: string;
-  disabled?: boolean;
-  hint?: string;
-  children?: React.ReactNode;
-}
 
 export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((props, ref) => {
   const {
@@ -81,21 +45,26 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     data,
     prevState,
 
-    getData,
+    onChange,
   } = props;
 
-  const [state, setState] = useState<DataType[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [hintId, setHintId] = useState<number | string>(-1);
 
   useEffect(() => {
     if (prevState) {
-      setState(prevState);
+      const tempSelecetedItem: string[] = [];
+      prevState.forEach(item => {
+        tempSelecetedItem.push(item.id);
+      })
+
+      setSelectedItems(tempSelecetedItem);
     }
     return;
   }, [prevState]);
 
   const componentClassName = clsx("flex flex-col gap-2", componentClass);
-  const questionLabelClassName = clsx("flex flex-row items-center text-current", question ? "gap-x-2 p-2" : "", QUESTION_SIZES[size], questionLabelClass);
+  const questionLabelClassName = clsx("flex flex-row items-center text-current font-medium", question ? "gap-x-2 p-2" : "", QUESTION_SIZES[size], questionLabelClass);
   const containerClassName = clsx("flex-wrap", CONTAINER_STYLES[containerStyle], containerClass);
   const itemClassName = clsx("p-2", BOX_ALIGNMENT_STYLES[alignment], itemClass);
   const inputClassName = clsx(
@@ -106,7 +75,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
     inputClass
   );
   const buttonClassName = clsx("hover:bg-transparent focus:ring focus:ring-transparent focus:ring-offset-4", buttonClass);
-  const labelClassName = clsx("inline-block text-current", LABEL_SIZES[size], labelClass);
+  const labelClassName = clsx("inline-block text-current font-medium", LABEL_SIZES[size], labelClass);
   const hintClassName = clsx("flex flex-row relative", hintClass);
   const hintIconClassName = clsx("text-current", hintIconClass);
   const hintTextClassName = clsx(
@@ -115,46 +84,25 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
   );
   const descriptionClassName = clsx("text-gray-400", descriptionClass, DESCRIPTION_SIZES[size]);
 
-  const isChecked = (data: DataType) => {
-    const newItem = JSON.parse(JSON.stringify(data));
-    if (newItem.children) {
-      delete newItem.children;
-    }
+  const handleChange = (event: ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>) => {
+    const id = event.currentTarget.id;
+    const tempSelecetedItems = [...selectedItems];
 
-    if (state?.length) {
-      const items = [...state];
-      for (const index in items) {
-        const value = DEEP_EQUAL(newItem, items[index]);
-        if (value) {
-          return parseInt(index);
-        }
-      }
-    }
-    return -1;
-  };
-
-  const handleChange = (item: DataType) => {
-    const newItem = JSON.parse(JSON.stringify(item));
-    if (newItem.children) {
-      delete newItem.children;
-    }
-
-    if (state?.length) {
-      const items = [...state];
-      const value = isChecked(newItem);
-      if (value !== -1) {
-        items.splice(value, 1);
-      } else {
-        items.push(newItem);
-      }
-
-      setState(items);
-      getData(items);
+    if (tempSelecetedItems.includes(id)) {
+      tempSelecetedItems.splice(tempSelecetedItems.indexOf(id), 1);
     } else {
-      setState([newItem]);
-      getData([newItem]);
+      tempSelecetedItems.push(id);
     }
-  };
+    setSelectedItems(tempSelecetedItems);
+
+    const selectedData: DataType[] = [];
+    data.forEach(item => {
+      if (tempSelecetedItems.includes(item.id)) {
+        selectedData.push(item);
+      }
+    })
+    onChange(selectedData);
+  }
 
   const handleShowHint = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -176,33 +124,9 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
           onMouseOver={handleShowHint}
           onMouseOut={handleHideHint}
         >
-          {!!questionHint &&
-            <span className={hintIconClassName}>
-              {hintIcon ? hintIcon :
-                <svg
-                  id="information_icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="16"
-                  width="16"
-                  viewBox="0 0 290 290"
-                  fill="currentColor"
-                >
-                  <g>
-                    <path
-                      d="M140.744,0C63.138,0,0,63.138,0,140.744s63.138,140.744,140.744,140.744s140.744-63.138,140.744-140.744
-                              S218.351,0,140.744,0z M140.744,263.488C73.063,263.488,18,208.426,18,140.744S73.063,18,140.744,18
-                              s122.744,55.063,122.744,122.744S208.425,263.488,140.744,263.488z"
-                    />
-                    <path
-                      d="M163.374,181.765l-16.824,9.849v-71.791c0-3.143-1.64-6.058-4.325-7.69c-2.686-1.632-6.027-1.747-8.818-0.299
-                              l-23.981,12.436c-4.413,2.288-6.135,7.72-3.847,12.132c2.289,4.413,7.72,6.136,12.133,3.847l10.838-5.62v72.684
-                              c0,3.225,1.726,6.203,4.523,7.808c1.387,0.795,2.932,1.192,4.477,1.192c1.572,0,3.143-0.411,4.546-1.232l30.371-17.778
-                              c4.29-2.512,5.732-8.024,3.221-12.314S167.663,179.255,163.374,181.765z"
-                    />
-                    <circle cx="137.549" cy="86.612" r="12.435" />
-                  </g>
-                </svg>}
-            </span>}
+          {!!questionHint?.length && (
+            <span className={hintIconClassName}>{hintIcon ? hintIcon : <HintIcon />}</span>
+          )}
           {hintId === question && (
             <span className={hintTextClassName}>{questionHint}</span>
           )}
@@ -220,12 +144,12 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
                   value={item.value}
                   type="checkbox"
                   className={inputClassName}
-                  onChange={() => handleChange(item)}
-                  checked={isChecked(item) === -1 ? false : true}
+                  onChange={handleChange}
+                  checked={selectedItems.includes(item.id)}
                   disabled={item?.disabled}
                 />
-                <div className="flex flex-col gap-y-1">
-                  <div className="flex flex-row gap-x-2 items-center">
+                <div className={clsx("flex flex-col", item?.description?.length ? "gap-y-1" : "gap-y-0")}>
+                  <div className={clsx("flex flex-row items-center", item?.hint?.length ? "gap-x-2" : "gap-x-0")}>
                     <label
                       className={clsx(
                         labelClassName,
@@ -235,7 +159,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
                     >
                       {item?.label}
                     </label>
-                    {!!item?.hint && (
+                    {!!item?.hint?.length && (
                       <div
                         id={item.id}
                         className={hintClassName}
@@ -249,29 +173,7 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
                           )}
                         >
                           {hintIcon ? hintIcon :
-                            <svg
-                              id="information_icon"
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="16"
-                              width="16"
-                              viewBox="0 0 290 290"
-                              fill="currentColor"
-                            >
-                              <g>
-                                <path
-                                  d="M140.744,0C63.138,0,0,63.138,0,140.744s63.138,140.744,140.744,140.744s140.744-63.138,140.744-140.744
-                              S218.351,0,140.744,0z M140.744,263.488C73.063,263.488,18,208.426,18,140.744S73.063,18,140.744,18
-                              s122.744,55.063,122.744,122.744S208.425,263.488,140.744,263.488z"
-                                />
-                                <path
-                                  d="M163.374,181.765l-16.824,9.849v-71.791c0-3.143-1.64-6.058-4.325-7.69c-2.686-1.632-6.027-1.747-8.818-0.299
-                              l-23.981,12.436c-4.413,2.288-6.135,7.72-3.847,12.132c2.289,4.413,7.72,6.136,12.133,3.847l10.838-5.62v72.684
-                              c0,3.225,1.726,6.203,4.523,7.808c1.387,0.795,2.932,1.192,4.477,1.192c1.572,0,3.143-0.411,4.546-1.232l30.371-17.778
-                              c4.29-2.512,5.732-8.024,3.221-12.314S167.663,179.255,163.374,181.765z"
-                                />
-                                <circle cx="137.549" cy="86.612" r="12.435" />
-                              </g>
-                            </svg>}
+                            <HintIcon />}
                         </span>
                         {hintId === item.id && (
                           <span className={hintTextClassName}>{item?.hint}</span>
@@ -284,11 +186,12 @@ export const VsCheckbox = React.forwardRef<HTMLInputElement, CheckBoxProps>((pro
               </>
             ) : (
               <VsButton
+                id={item.id}
                 btnSize={size}
                 classNames={clsx(
-                  isChecked(item) !== -1 ? BUTTON_BOX_COLORS['selected'][boxColor] : BUTTON_BOX_COLORS['notSelected'][boxColor], buttonClassName)}
+                  selectedItems.includes(item.id) ? BUTTON_BOX_COLORS['selected'][boxColor] : BUTTON_BOX_COLORS['notSelected'][boxColor], buttonClassName)}
                 disabled={item?.disabled}
-                onClick={() => handleChange(item)}
+                onClick={handleChange}
                 btnBorderStyle={boxBorderStyle}
                 btnType="outline"
                 children={item?.children ?? item?.label}

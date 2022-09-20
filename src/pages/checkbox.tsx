@@ -106,7 +106,7 @@ const Checkbox = () => {
 
                             data={data}
                             prevState={selectedData}
-                            getData={getData}
+                            onChange={getData}
                         />
                     </div>
                     <div className="w-3/10">

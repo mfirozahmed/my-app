@@ -5,11 +5,12 @@ export default {
   title: "Components/Form Elements",
   component: VsCheckbox,
   argTypes: {
-    boxBorderStyle: { control: "inline-radio", options: ["none", "default", "rounded"] },
-    size: { control: "inline-radio", options: ["sm", "md", "lg", "xl"] },
-    containerStyle: { control: "inline-radio", options: ["block", "inline"] },
-    alignment: { control: "inline-radio", options: ["default", "right", "top", "bottom"] },
-    pattern: { control: "inline-radio", options: ["default", "button"] },
+    containerStyle: { control: "inline-radio" },
+    size: { control: "inline-radio" },
+    boxBorderStyle: { control: "inline-radio" },
+    boxColor: { control: "inline-radio" },
+    alignment: { control: "inline-radio" },
+    pattern: { control: "inline-radio" },
   },
 };
 
@@ -18,3 +19,12 @@ const Template: ComponentStory<typeof VsCheckbox> = (args) => {
 };
 
 export const Checkbox = Template.bind({});
+
+Checkbox.args = {
+  containerStyle: "block",
+  size: "md",
+  boxBorderStyle: "default",
+  boxColor: "default",
+  alignment: "default",
+  pattern: "default",
+}

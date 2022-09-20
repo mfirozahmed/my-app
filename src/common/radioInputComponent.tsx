@@ -4,12 +4,13 @@ import clsx from "clsx";
 interface dataProps {
     divClass?: string,
     label: string,
+    name: string,
     data: string[],
     state: any,
     handleOtherPropsChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const RadioInputComponent = ({ divClass, label, data, state, handleOtherPropsChange }: dataProps) => {
+const RadioInputComponent = ({ divClass, label, name, data, state, handleOtherPropsChange }: dataProps) => {
     return (
         <div className="flex flex-wrap items-center gap-x-2">
             <h4>{label}:</h4>
@@ -18,9 +19,9 @@ const RadioInputComponent = ({ divClass, label, data, state, handleOtherPropsCha
                     <input
                         id={`label-${item}`}
                         type="radio"
-                        name="containerStyle"
+                        name={name}
                         value={item}
-                        checked={state.containerStyle === item}
+                        checked={state[name] === item}
                         onChange={handleOtherPropsChange}
                     />
                     <label htmlFor={`label-${item}`}>{item}</label>

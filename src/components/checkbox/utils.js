@@ -5,31 +5,31 @@ export const BOX_BORDER_STYLES = {
 };
 
 export const BOX_SIZES = {
-  sm: "px-2 py-2",
-  md: "px-2.5 py-2.5",
-  lg: "px-3 py-3",
-  xl: "px-3.5 py-3.5",
+  sm: "p-2",
+  md: "p-2.5",
+  lg: "p-3",
+  xl: "p-3.5",
 };
 
 export const QUESTION_SIZES = {
-  sm: "font-medium text-md text-current",
-  md: "font-medium text-lg text-current",
-  lg: "font-medium text-xl text-current",
-  xl: "font-medium text-2xl text-current",
+  sm: "text-md",
+  md: "text-lg",
+  lg: "text-xl",
+  xl: "text-2xl",
 };
 
 export const LABEL_SIZES = {
-  sm: "font-medium text-sm text-current",
-  md: "font-medium text-md text-current",
-  lg: "font-medium text-lg text-current",
-  xl: "font-medium text-xl text-current",
+  sm: "text-sm",
+  md: "text-md",
+  lg: "text-lg",
+  xl: "text-xl",
 };
 
 export const DESCRIPTION_SIZES = {
-  sm: "text-xs text-current",
-  md: "text-sm text-current",
-  lg: "text-md text-current",
-  xl: "text-lg text-current",
+  sm: "text-xs",
+  md: "text-sm",
+  lg: "text-md",
+  xl: "text-lg",
 };
 
 export const CONTAINER_STYLES = {
@@ -74,30 +74,3 @@ export const BUTTON_BOX_COLORS = {
     dark: 'text-gray-500 hover:text-black border-gray-200 focus:ring-offset-gray-400/80'
   },
 };
-
-export const DEEP_EQUAL = (x, y) => {
-  if (x === y) {
-    return true;
-  } else if (
-    typeof x == "object" &&
-    x != null &&
-    typeof y == "object" &&
-    y != null
-  ) {
-    if (Object.keys(x).length !== Object.keys(y).length) {
-      return false;
-    }
-
-    for (const prop in x) {
-      if (Object.prototype.hasOwnProperty.call(y, prop)) {
-        if (!DEEP_EQUAL(x[prop], y[prop])) return false;
-      } else {
-        return false;
-      }
-    }
-    return true;
-  } else {
-    return false;
-  }
-};
-

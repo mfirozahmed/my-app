@@ -22,13 +22,12 @@ const CreateOtherProps = ({ otherProps, sendData }: CreateOtherPropsType) => {
     return (
         <form className="px-8 py-4 rounded-md bg-gray-300 text-black text-lg font-medium">
             <div className="flex flex-col h-96 overflow-auto justify-between gap-y-4">
-                <RadioInputComponent label="Container Style" data={["block", "inline"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Size" data={["sm", "md", "lg", "xl"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Box Border Style" data={["default", "none", "rounded"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Box Color" data={["default", "success", "danger", "warning", "info", "light", "dark"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Alignment" data={["default", "right", "top", "bottom"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Pattern" data={["default", "button"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
-                <RadioInputComponent label="Container Style" data={["block", "inline"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Container Style" name='containerStyle' data={["block", "inline"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Size" name='size' data={["sm", "md", "lg", "xl"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Box Border Style" name='boxBorderStyle' data={["default", "none", "rounded"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Box Color" name='boxColor' data={["default", "success", "danger", "warning", "info", "light", "dark"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Alignment" name='alignment' data={["default", "right", "top", "bottom"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
+                <RadioInputComponent label="Pattern" name='pattern' data={["default", "button"]} state={otherProps} handleOtherPropsChange={handleOtherPropsChange} />
 
                 <TextInputComponent divClass="pr-8" id="componentClass" type="text" value={otherProps.componentClass} label="Component Class" placeholder="Give A Component Class" handleInputChange={handleOtherPropsChange} />
                 <TextInputComponent divClass="pr-8" id="questionLabelClass" type="text" value={otherProps.questionLabelClass} label="Question Label Class" placeholder="Give A Question Label Class" handleInputChange={handleOtherPropsChange} />
