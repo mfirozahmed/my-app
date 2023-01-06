@@ -42,12 +42,12 @@ const Home: NextPage = () => {
           </a>
 
           <a
-            href="/checkbox"
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
           >
-            <h2>CheckBox &rarr;</h2>
+            <h2>Deploy &rarr;</h2>
             <p>
-              Check Checkbox Component
+              Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a>
         </div>

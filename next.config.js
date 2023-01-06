@@ -46,6 +46,6 @@ module.exports = {
   images: {
     minimumCacheTTL: 60,
     domains: [],
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/avif', 'image/webp', 'image/png', 'image/jpg'],
   },
 };
